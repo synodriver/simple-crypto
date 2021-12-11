@@ -1,12 +1,12 @@
-# simple-md5-lib
+# simple-crypto
 
-Simple C lib of the MD5 algorithm
+Simple C lib of the MD5 & TEA algorithm
 
 # Install
 
 ```bash
-git clone https://github.com/fumiama/simple-md5-lib.git
-cd simple-md5-lib
+git clone https://github.com/fumiama/simple-crypto.git
+cd simple-crypto
 mkdir build
 cd build
 cmake ..
@@ -16,11 +16,16 @@ make install
 
 # Usage
 
-1. Include `simplemd5.h` in your c program.
+1. Include `simplecrypto.h` in your c program.
 ```c
-#include <simplemd5.h>
+#include <simplecrypto.h>
 ```
-2. Call `md5` function. Don't forget to `free` the returned digest.
+2. Call functions. Don't forget to `free` the returned digest.
 ```c
 uint8_t* md5(const uint8_t *data, size_t data_len);
+
+TEADAT* tea_encrypt_qq(const TEA t[4], const TEADAT* src);
+TEADAT* tea_encrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
+TEADAT* tea_decrypt_qq(const TEA t[4], const TEADAT* src);
+TEADAT* tea_decrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
 ```

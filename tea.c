@@ -1,3 +1,5 @@
+// https://github.com/Mrs4s/MiraiGo/blob/master/binary/tea.go
+
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
