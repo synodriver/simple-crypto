@@ -1,5 +1,5 @@
-#ifndef _SIMPLE_MD5_H_
-#define _SIMPLE_MD5_H_
+#ifndef _SIMPLECRYPTO_H_
+#define _SIMPLECRYPTO_H_
 #include <stdio.h>
 #include <stdint.h>
 
