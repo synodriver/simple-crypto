@@ -123,6 +123,45 @@ TEADAT* tea_encrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT*
 	return dst;
 }
 
+TEADAT* tea_encrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src) {
+	int64_t lens = src->len;
+	int64_t fill = 10 - (lens+1)%8;
+	int64_t dstlen = fill+lens+7;
+	uint8_t* dstdat = (uint8_t*)malloc(dstlen);
+	srand(time(NULL));
+	((uint32_t*)dstdat)[0] = rand();
+	((uint32_t*)dstdat)[1] = rand();
+	((uint32_t*)dstdat)[2] = rand();
+	dstdat[0] = (fill-3)|0xF8; // 存储pad长度
+	memcpy(dstdat+fill, src->data, lens);
+
+	uint64_t iv1 = 0, iv2 = 0, holder;
+	for(int64_t i = 0; i < dstlen/8; i++) {
+		uint64_t block = ((uint64_t*)dstdat)[i];
+		holder = block ^ iv1;
+
+		iv1 = holder;
+		uint32_t v1 = holder;
+		iv1 >>= 32;
+		uint32_t v0 = iv1;
+		for (int i = 0; i < 0x10; i++) {
+			v0 += (v1 + sumtable[i]) ^ ((v1 << 4) + t[0]) ^ ((v1 >> 5) + t[1]);
+			v1 += (v0 + sumtable[i]) ^ ((v0 << 4) + t[2]) ^ ((v0 >> 5) + t[3]);
+		}
+		iv1 = ((uint64_t)v0<<32) | (uint64_t)v1;
+
+		iv1 = iv1 ^ iv2;
+		iv2 = holder;
+		((uint64_t*)dstdat)[i] = iv1;
+	}
+
+	TEADAT* dst = (TEADAT*)malloc(sizeof(TEADAT));
+	dst->len = dstlen;
+	dst->data = dstdat;
+	dst->ptr = dstdat;
+	return dst;
+}
+
 TEADAT* tea_decrypt_qq(const TEA t[4], const TEADAT* src) {
 	if (src->len < 16 || (src->len)%8 != 0) {
 		return NULL;
@@ -195,6 +234,40 @@ TEADAT* tea_decrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT*
 		#else
 			((uint64_t*)dstdat)[i] = __builtin_bswap64(iv2^holder);
 		#endif
+
+		holder = iv1;
+	}
+
+	TEADAT* dst = (TEADAT*)malloc(sizeof(TEADAT));
+	int start = (dstdat[0]&7)+3;
+	dst->len = src->len-7-start;
+	dst->data = dstdat+start;
+	dst->ptr = dstdat;
+	return dst;
+}
+
+TEADAT* tea_decrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src) {
+	if (src->len < 16 || (src->len)%8 != 0) {
+		return NULL;
+	}
+	uint8_t* dstdat = (uint8_t*)malloc(src->len);
+
+	uint64_t iv1, iv2 = 0, holder = 0;
+	for(int64_t i = 0; i < src->len/8; i++) {
+		iv1 = ((uint64_t*)(src->data))[i];
+
+		iv2 ^= iv1;
+		
+		uint32_t v1 = iv2;
+		iv2 >>= 32;
+		uint32_t v0 = iv2;
+		for (int i = 0x0f; i >= 0; i--) {
+			v1 -= (v0 + sumtable[i]) ^ ((v0 << 4) + t[2]) ^ ((v0 >> 5) + t[3]);
+			v0 -= (v1 + sumtable[i]) ^ ((v1 << 4) + t[0]) ^ ((v1 >> 5) + t[1]);
+		}
+		iv2 = ((uint64_t)v0<<32) | (uint64_t)v1;
+
+		((uint64_t*)dstdat)[i] = iv2^holder;
 
 		holder = iv1;
 	}

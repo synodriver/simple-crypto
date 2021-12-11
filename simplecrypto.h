@@ -23,8 +23,10 @@ typedef struct TEADAT TEADAT;
 
 TEADAT* tea_encrypt_qq(const TEA t[4], const TEADAT* src);
 TEADAT* tea_encrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
+TEADAT* tea_encrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
 TEADAT* tea_decrypt_qq(const TEA t[4], const TEADAT* src);
 TEADAT* tea_decrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
+TEADAT* tea_decrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
 
 // ---------------TEA area---------------
 

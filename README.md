@@ -26,6 +26,8 @@ uint8_t* md5(const uint8_t *data, size_t data_len);
 
 TEADAT* tea_encrypt_qq(const TEA t[4], const TEADAT* src);
 TEADAT* tea_encrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
+TEADAT* tea_encrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
 TEADAT* tea_decrypt_qq(const TEA t[4], const TEADAT* src);
 TEADAT* tea_decrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
+TEADAT* tea_decrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
 ```
