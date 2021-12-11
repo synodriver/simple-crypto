@@ -2,7 +2,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #if !__APPLE__
 	#include <endian.h>
 #else
@@ -34,7 +33,6 @@ TEADAT* tea_encrypt_qq(const TEA t[4], const TEADAT* src) {
 	int64_t fill = 10 - (lens+1)%8;
 	int64_t dstlen = fill+lens+7;
 	uint8_t* dstdat = (uint8_t*)malloc(dstlen);
-	srand(time(NULL));
 	((uint32_t*)dstdat)[0] = rand();
 	((uint32_t*)dstdat)[1] = rand();
 	((uint32_t*)dstdat)[2] = rand();
@@ -81,7 +79,6 @@ TEADAT* tea_encrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT*
 	int64_t fill = 10 - (lens+1)%8;
 	int64_t dstlen = fill+lens+7;
 	uint8_t* dstdat = (uint8_t*)malloc(dstlen);
-	srand(time(NULL));
 	((uint32_t*)dstdat)[0] = rand();
 	((uint32_t*)dstdat)[1] = rand();
 	((uint32_t*)dstdat)[2] = rand();
@@ -128,7 +125,6 @@ TEADAT* tea_encrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10],
 	int64_t fill = 10 - (lens+1)%8;
 	int64_t dstlen = fill+lens+7;
 	uint8_t* dstdat = (uint8_t*)malloc(dstlen);
-	srand(time(NULL));
 	((uint32_t*)dstdat)[0] = rand();
 	((uint32_t*)dstdat)[1] = rand();
 	((uint32_t*)dstdat)[2] = rand();
