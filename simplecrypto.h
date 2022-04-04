@@ -6,7 +6,7 @@
 // ---------------MD5 area---------------
 
 // return 128bit(16bytes) digest
-uint8_t* md5(const uint8_t *data, size_t data_len);
+uint8_t* md5(const uint8_t *data, size_t data_len, uint8_t digest[16]);
 
 // ---------------MD5 area---------------
 

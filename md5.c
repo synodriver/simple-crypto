@@ -61,7 +61,7 @@ static uint32_t to_int32(const uint8_t *bytes) {
 	return val;
 }
 
-uint8_t* md5(const uint8_t *data, size_t data_len) {
+uint8_t* md5(const uint8_t *data, size_t data_len, uint8_t digest[16]) {
 
 	// These vars will contain the hash
 	uint32_t h0, h1, h2, h3;
@@ -149,12 +149,11 @@ uint8_t* md5(const uint8_t *data, size_t data_len) {
 	free(msg);
 
 	//var char digest[16] := h0 append h1 append h2 append h3 //(Output is in little-endian)
-	uint8_t *digest = (uint8_t*)malloc(16*sizeof(char));
 	to_bytes(h0, digest);
 	to_bytes(h1, digest + 4);
 	to_bytes(h2, digest + 8);
 	to_bytes(h3, digest + 12);
-	return digest;
+	return (uint8_t*)digest;
 }
 
 #ifdef TEST_SIMPLE_CRYPTO
