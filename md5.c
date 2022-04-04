@@ -2,12 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#if !__APPLE__
-	#include <endian.h>
-#else
-	#include <machine/endian.h>
-#endif
-#include "simplecrypto.h"
+#include <stdint.h>
 
 // Constants are the integer part of the sines of integers (in radians) * 2^32.
 const static uint32_t k[64] = {
@@ -39,59 +34,47 @@ const static uint32_t r[] = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12,
 
 static void to_bytes(uint32_t val, uint8_t *bytes) {
 	#ifdef WORDS_BIGENDIAN
-		#if __APPLE__
-			val = __DARWIN_OSSwapInt32(val);
-		#else
-			val = __builtin_bswap32(val);
-		#endif
+		*(uint32_t*)bytes =  __builtin_bswap32(val);
+	#else
+		*(uint32_t*)bytes = val;
 	#endif
-	*(uint32_t*)bytes = val;
 }
 
-static uint32_t to_int32(const uint8_t *bytes) {
+static uint32_t to_uint32(const uint8_t *bytes) {
 	#ifdef WORDS_BIGENDIAN
-		#if __APPLE__
-			uint32_t val = __DARWIN_OSSwapInt32(*(uint32_t*)bytes);
-		#else
-			uint32_t val = __builtin_bswap32(*(uint32_t*)bytes);
-		#endif
+		return __builtin_bswap32(*(uint32_t*)bytes);
 	#else
-		uint32_t val = *(uint32_t*)bytes;
+		return *(uint32_t*)bytes;
 	#endif
-	return val;
 }
 
 uint8_t* md5(const uint8_t *data, size_t data_len, uint8_t digest[16]) {
+	uint32_t w[16];
 
 	// These vars will contain the hash
-	uint32_t h0, h1, h2, h3;
+	// Initialize variables - simple count in nibbles:
+	uint32_t h0 = 0x67452301;
+	uint32_t h1 = 0xefcdab89;
+	uint32_t h2 = 0x98badcfe;
+	uint32_t h3 = 0x10325476;
 
 	// Message (to prepare)
 	uint8_t *msg = NULL;
 
 	size_t new_len, offset;
-	uint32_t w[16];
 	uint32_t a, b, c, d, i, f, g, temp;
-
-	// Initialize variables - simple count in nibbles:
-	h0 = 0x67452301;
-	h1 = 0xefcdab89;
-	h2 = 0x98badcfe;
-	h3 = 0x10325476;
 
 	//Pre-processing:
 	//append "1" bit to message    
 	//append "0" bits until message length in bits ≡ 448 (mod 512)
 	//append length mod (2^64) to message
 
-	for (new_len = data_len + 1; new_len % (512/8) != 448/8; new_len++)
-		;
+	for (new_len = data_len + 1; new_len % (512/8) != 448/8; new_len++);
 
 	msg = (uint8_t*)malloc(new_len + 8);
 	memcpy(msg, data, data_len);
 	msg[data_len] = 0x80; // append the "1" bit; most significant bit is "first"
-	for (offset = data_len + 1; offset < new_len; offset++)
-		msg[offset] = 0; // append "0" bits
+	memset(&msg[data_len+1], 0, new_len-data_len-1); // append "0" bits
 
 	// append the len in bits at the end of the buffer.
 	to_bytes(data_len*8, msg + new_len);
@@ -101,10 +84,9 @@ uint8_t* md5(const uint8_t *data, size_t data_len, uint8_t digest[16]) {
 	// Process the message in successive 512-bit chunks:
 	//for each 512-bit chunk of message:
 	for(offset=0; offset<new_len; offset += (512/8)) {
-
 		// break chunk into sixteen 32-bit words w[j], 0 ≤ j ≤ 15
 		for (i = 0; i < 16; i++)
-			w[i] = to_int32(msg + offset + i*4);
+			w[i] = to_uint32(msg + offset + i*4);
 
 		// Initialize hash value for this chunk:
 		a = h0;
