@@ -149,10 +149,10 @@ uint8_t* md5(const uint8_t *data, size_t data_len, uint8_t digest[16]) {
 	free(msg);
 
 	//var char digest[16] := h0 append h1 append h2 append h3 //(Output is in little-endian)
-	to_bytes(h0, digest);
-	to_bytes(h1, digest + 4);
-	to_bytes(h2, digest + 8);
-	to_bytes(h3, digest + 12);
+	to_bytes(h0, &digest[0]);
+	to_bytes(h1, &digest[4]);
+	to_bytes(h2, &digest[8]);
+	to_bytes(h3, &digest[12]);
 	return (uint8_t*)digest;
 }
 
