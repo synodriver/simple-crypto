@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 project(simple-crypto C)
-SET(CMAKE_BUILD_TYPE "Release")
+#SET(CMAKE_BUILD_TYPE "Release")
+include_directories(F:/conda/Library/include ./)
+link_directories("F:\\conda\\Library\\lib" F:/conda/Library/bin)
+
 
 include(TestBigEndian)
 test_big_endian(isBigEndian)
@@ -18,3 +21,7 @@ else()
     INSTALL(TARGETS scrypto LIBRARY DESTINATION lib)
     INSTALL(FILES simplecrypto.h DESTINATION include)
 endif()
+
+add_library(tea SHARED tea.c src/ltea.c)
+target_link_libraries(tea lua)
+set_target_properties(tea PROPERTIES OUTPUT_NAME tea)

@@ -12,21 +12,16 @@ uint8_t* md5(const uint8_t *data, size_t data_len, uint8_t digest[16]);
 
 
 // ---------------TEA area---------------
-
-typedef uint32_t TEA;
-struct TEADAT {
-    int64_t len;
-    uint8_t* data;
-    void* ptr; // free() must use this val
-};
-typedef struct TEADAT TEADAT;
-
-TEADAT* tea_encrypt_qq(const TEA t[4], const TEADAT* src);
-TEADAT* tea_encrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
-TEADAT* tea_encrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
-TEADAT* tea_decrypt_qq(const TEA t[4], const TEADAT* src);
-TEADAT* tea_decrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
-TEADAT* tea_decrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
+int64_t tea_encrypt_qq(const uint32_t t[4], const uint8_t *src, int64_t src_len, uint8_t *out, int64_t out_len);
+int64_t tea_encrypt(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *src, int64_t src_len, uint8_t *out,
+                    int64_t out_len);
+int64_t tea_encrypt_native_endian(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *src, int64_t src_len,
+                          uint8_t *out, int64_t out_len);
+int64_t tea_decrypt_qq(const uint32_t t[4], const uint8_t *src, int64_t src_len, uint8_t *out, int64_t out_len);
+int64_t tea_decrypt(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *src, int64_t src_len, uint8_t *out,
+            int64_t out_len);
+int64_t tea_decrypt_native_endian(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *src, int64_t src_len,
+                          uint8_t *out, int64_t out_len);
 
 // ---------------TEA area---------------
 

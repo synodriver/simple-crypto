@@ -22,12 +22,32 @@ make install
 ```
 2. Call functions. Don't forget to `free` the returned digest.
 ```c
-uint8_t* md5(const uint8_t *data, size_t data_len);
+int64_t tea_encrypt_qq(const uint32_t t[4], const uint8_t *src, int64_t src_len, uint8_t *out, int64_t out_len);
+int64_t tea_encrypt(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *src, int64_t src_len, uint8_t *out,
+                    int64_t out_len);
+int64_t tea_encrypt_native_endian(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *src, int64_t src_len,
+                          uint8_t *out, int64_t out_len);
+int64_t tea_decrypt_qq(const uint32_t t[4], const uint8_t *src, int64_t src_len, uint8_t *out, int64_t out_len);
+int64_t tea_decrypt(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *src, int64_t src_len, uint8_t *out,
+            int64_t out_len);
+int64_t tea_decrypt_native_endian(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *src, int64_t src_len,
+                          uint8_t *out, int64_t out_len);
+```
+3. Optional lua binding
+```lua
+local tea = require("tea")
 
-TEADAT* tea_encrypt_qq(const TEA t[4], const TEADAT* src);
-TEADAT* tea_encrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
-TEADAT* tea_encrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
-TEADAT* tea_decrypt_qq(const TEA t[4], const TEADAT* src);
-TEADAT* tea_decrypt(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
-TEADAT* tea_decrypt_native_endian(const TEA t[4], const uint32_t sumtable[0x10], const TEADAT* src);
+
+local encoded = tea.encrypt_qq("32107654BA98FEDC", "hahaha")
+print(encoded)
+
+print(tea.decrypt_qq("32107654BA98FEDC",encoded))
+
+
+tea.encrypt("32107654BA98FEDC", sumtableof64bits,"hahaha")
+tea.decrypt("32107654BA98FEDC", sumtableof64bits,"hahaha")
+
+tea.encrypt_native_endian("32107654BA98FEDC", sumtableof64bits,"hahaha")
+tea.decrypt_native_endian("32107654BA98FEDC", sumtableof64bits,"hahaha")
+
 ```
