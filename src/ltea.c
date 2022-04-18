@@ -20,13 +20,14 @@ int64_t encrypt_qq_len(int64_t src_len)
 static int
 lencrypt_qq(lua_State *L)
 {
-    size_t key_len;
-    const char *key = luaL_checklstring(L, 1, &key_len);
-    if (key_len != 16)
+    if (lua_gettop(L) != 2)
     {
-        luaL_error(L, "key must be 16 bytes len!\n");
+        luaL_error(L, "must be 2 args, key and data");
         return 0;
     }
+    size_t key_len;
+    const char *key = luaL_checklstring(L, 1, &key_len);
+    luaL_argcheck(L, key_len == 16, 1, "key must be 16 bytes len!");
     size_t src_len;
     const char *src = luaL_checklstring(L, 2, &src_len);
     int64_t out_len = encrypt_qq_len((int64_t) src_len);
@@ -44,21 +45,17 @@ lencrypt_qq(lua_State *L)
 static int
 lencrypt(lua_State *L)
 {
+    if (lua_gettop(L) != 3)
+    {
+        luaL_error(L, "must be 3 args, key , sumtable and data");
+        return 0;
+    }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
-    if (key_len != 16)
-    {
-        luaL_error(L, "key must be 16 bytes len!\n");
-        return 0;
-    }
+    luaL_argcheck(L, key_len == 16, 1, "key must be 16 bytes len!");
     size_t sumtable_len;
     const char *sumtable = luaL_checklstring(L, 2, &sumtable_len);
-    if (sumtable_len != 64)
-    {
-        luaL_error(L, "sum table must be 64 bytes len!\n");
-        return 0;
-    }
-
+    luaL_argcheck(L, sumtable_len == 64, 2, "sum table must be 64 bytes len!");
     size_t src_len;
     const char *src = luaL_checklstring(L, 3, &src_len);
     int64_t out_len = encrypt_qq_len((int64_t) src_len);
@@ -78,20 +75,17 @@ lencrypt(lua_State *L)
 static int
 lencrypt_native_endian(lua_State *L)
 {
+    if (lua_gettop(L) != 3)
+    {
+        luaL_error(L, "must be 3 args, key , sumtable and data");
+        return 0;
+    }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
-    if (key_len != 16)
-    {
-        luaL_error(L, "key must be 16 bytes len!\n");
-        return 0;
-    }
+    luaL_argcheck(L, key_len == 16, 1, "key must be 16 bytes len!");
     size_t sumtable_len;
     const char *sumtable = luaL_checklstring(L, 2, &sumtable_len);
-    if (sumtable_len != 64)
-    {
-        luaL_error(L, "sum table must be 64 bytes len!\n");
-        return 0;
-    }
+    luaL_argcheck(L, sumtable_len == 64, 2, "sum table must be 64 bytes len!");
 
     size_t src_len;
     const char *src = luaL_checklstring(L, 3, &src_len);
@@ -112,13 +106,14 @@ lencrypt_native_endian(lua_State *L)
 static int
 ldecrypt_qq(lua_State *L)
 {
-    size_t key_len;
-    const char *key = luaL_checklstring(L, 1, &key_len);
-    if (key_len != 16)
+    if (lua_gettop(L) != 2)
     {
-        luaL_error(L, "key must be 16 bytes len!\n");
+        luaL_error(L, "must be 2 args, key and data");
         return 0;
     }
+    size_t key_len;
+    const char *key = luaL_checklstring(L, 1, &key_len);
+    luaL_argcheck(L, key_len == 16, 1, "key must be 16 bytes len!");
     size_t src_len;
     const char *src = luaL_checklstring(L, 2, &src_len);
     uint8_t *out = (uint8_t *) lua_newuserdata(L, (size_t) src_len);
@@ -137,20 +132,17 @@ ldecrypt_qq(lua_State *L)
 static int
 ldecrypt(lua_State *L)
 {
+    if (lua_gettop(L) != 3)
+    {
+        luaL_error(L, "must be 3 args, key , sumtable and data");
+        return 0;
+    }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
-    if (key_len != 16)
-    {
-        luaL_error(L, "key must be 16 bytes len!\n");
-        return 0;
-    }
+    luaL_argcheck(L, key_len == 16, 1, "key must be 16 bytes len!");
     size_t sumtable_len;
     const char *sumtable = luaL_checklstring(L, 2, &sumtable_len);
-    if (sumtable_len != 64)
-    {
-        luaL_error(L, "sum table must be 64 bytes len!\n");
-        return 0;
-    }
+    luaL_argcheck(L, sumtable_len == 64, 2, "sum table must be 64 bytes len!");
     size_t src_len;
     const char *src = luaL_checklstring(L, 3, &src_len);
     uint8_t *out = (uint8_t *) lua_newuserdata(L, (size_t) src_len);
@@ -168,25 +160,22 @@ ldecrypt(lua_State *L)
 static int
 ldecrypt_native_endian(lua_State *L)
 {
+    if (lua_gettop(L) != 3)
+    {
+        luaL_error(L, "must be 3 args, key , sumtable and data");
+        return 0;
+    }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
-    if (key_len != 16)
-    {
-        luaL_error(L, "key must be 16 bytes len!\n");
-        return 0;
-    }
+    luaL_argcheck(L, key_len == 16, 1, "key must be 16 bytes len!");
     size_t sumtable_len;
     const char *sumtable = luaL_checklstring(L, 2, &sumtable_len);
-    if (sumtable_len != 64)
-    {
-        luaL_error(L, "sum table must be 64 bytes len!\n");
-        return 0;
-    }
+    luaL_argcheck(L, sumtable_len == 64, 2, "sum table must be 64 bytes len!");
     size_t src_len;
     const char *src = luaL_checklstring(L, 3, &src_len);
     uint8_t *out = (uint8_t *) lua_newuserdata(L, (size_t) src_len);
     int64_t buffer_updated = tea_decrypt_native_endian((uint32_t *) key, (uint32_t *) sumtable, (const uint8_t *) src,
-                                         (int64_t) src_len, out, (int64_t) src_len);
+                                                       (int64_t) src_len, out, (int64_t) src_len);
     if (buffer_updated < 0)
     {
         luaL_error(L, "decrypt wrong\n");
