@@ -239,7 +239,7 @@ int64_t tea_decrypt_qq(const uint32_t t[4], const uint8_t *src, int64_t src_len,
     int64_t buffer_updated = src_len - 7 - start;
 //    dst->len = src_len - 7 - start;
 //    dst->data = out + start;
-    memcpy(out, out + start, (size_t) buffer_updated);
+    memmove(out, out + start, (size_t) buffer_updated);
 //    dst->ptr = out;
     return buffer_updated;
 }
@@ -293,7 +293,7 @@ tea_decrypt(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *s
     int64_t buffer_updated = src_len - 7 - start;
 //    dst->len = src_len - 7 - start;
 //    dst->data = out + start;
-    memcpy(out, out + start, (size_t) buffer_updated);
+    memmove(out, out + start, (size_t) buffer_updated);
 //    dst->ptr = out;
     return buffer_updated;
 }
@@ -339,7 +339,7 @@ tea_decrypt_native_endian(const uint32_t t[4], const uint32_t sumtable[0x10], co
     int64_t buffer_updated = src_len - 7 - start;
 //    dst->len = src_len - 7 - start;
 //    dst->data =  out + start;
-    memcpy(out, out + start, (size_t) buffer_updated);
+    memmove(out, out + start, (size_t) buffer_updated);
 //    dst->ptr =  out;
     return buffer_updated;
 }
