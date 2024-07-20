@@ -46,9 +46,10 @@ int64_t tea_encrypt_qq(const uint32_t t[4], const uint8_t *src, int64_t src_len,
     {
         return -1;
     }
-    ((uint32_t *) out)[0] = rand();
-    ((uint32_t *) out)[1] = rand();
-    ((uint32_t *) out)[2] = rand();
+    // ((uint32_t *) out)[0] = 0;
+    // ((uint32_t *) out)[1] = 0;
+    // ((uint32_t *) out)[2] = 0;
+    memset(out, 0, out_len);
     out[0] = (fill - 3) | 0xF8; // 存储pad长度
     memcpy(out + fill, src, src_len);
 
@@ -102,9 +103,10 @@ tea_encrypt(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *s
         return -1;
     }
 //    uint8_t *dstdat = (uint8_t *) malloc(dstlen);
-    ((uint32_t *) out)[0] = rand();
-    ((uint32_t *) out)[1] = rand();
-    ((uint32_t *) out)[2] = rand();
+    // ((uint32_t *) out)[0] = 0;
+    // ((uint32_t *) out)[1] = 0;
+    // ((uint32_t *) out)[2] = 0;
+    memset(out, 0, out_len);
     out[0] = (fill - 3) | 0xF8; // 存储pad长度
     memcpy(out + fill, src, src_len);
 
@@ -157,9 +159,10 @@ tea_encrypt_native_endian(const uint32_t t[4], const uint32_t sumtable[0x10], co
         return -1;
     }
 //    uint8_t *dstdat = (uint8_t *) malloc(dstlen);
-    ((uint32_t *) out)[0] = rand();
-    ((uint32_t *) out)[1] = rand();
-    ((uint32_t *) out)[2] = rand();
+    // ((uint32_t *) out)[0] = 0;
+    // ((uint32_t *) out)[1] = 0;
+    // ((uint32_t *) out)[2] = 0;
+    memset(out, 0, out_len);
     out[0] = (fill - 3) | 0xF8; // 存储pad长度
     memcpy(out + fill, src, src_len);
 
@@ -208,7 +211,7 @@ int64_t tea_decrypt_qq(const uint32_t t[4], const uint8_t *src, int64_t src_len,
     for (int64_t i = 0; i < src_len / 8; i++)
     {
 #ifdef WORDS_BIGENDIAN
-        iv1 = ((uint64_t*)(src->data))[i];
+        iv1 = ((uint64_t*)src)[i];
 #else
         iv1 = __builtin_bswap64(((uint64_t *) (src))[i]);
 #endif
@@ -262,7 +265,7 @@ tea_decrypt(const uint32_t t[4], const uint32_t sumtable[0x10], const uint8_t *s
     for (int64_t i = 0; i < src_len / 8; i++)
     {
 #ifdef WORDS_BIGENDIAN
-        iv1 = ((uint64_t*)(src->data))[i];
+        iv1 = ((uint64_t*)src)[i];
 #else
         iv1 = __builtin_bswap64(((uint64_t *) (src))[i]);
 #endif
