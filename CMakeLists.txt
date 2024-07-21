@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 2.6)
 project(simple-crypto C)
 #SET(CMAKE_BUILD_TYPE "Release")
-include_directories(F:/conda/Library/include ./)
-link_directories("F:\\conda\\Library\\lib" F:/conda/Library/bin)
-
+# change this to your lua.h directory
+include_directories(D:\\conda\\envs\\py310\\Library\\include .)
+# change this to your lua.lib\liblua.a directory
+link_directories("D:\\conda\\envs\\py310\\Library\\lib" D:\\conda\\envs\\py310\\Library\\bin)
 
 include(TestBigEndian)
 test_big_endian(isBigEndian)
@@ -27,4 +28,4 @@ endif()
 
 add_library(tea SHARED tea.c src/ltea.c)
 target_link_libraries(tea lua)
-set_target_properties(tea PROPERTIES OUTPUT_NAME tea)
+set_target_properties(tea PROPERTIES OUTPUT_NAME tea PREFIX "")
