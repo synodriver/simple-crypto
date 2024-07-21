@@ -24,8 +24,7 @@ lencrypt_qq(lua_State *L)
 {
     if (lua_gettop(L) != 2)
     {
-        luaL_error(L, "must be 2 args, key and data");
-        return 0;
+        return luaL_error(L, "must be 2 args, key and data");
     }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
@@ -46,8 +45,7 @@ lencrypt_qq(lua_State *L)
     int64_t buffer_updated = tea_encrypt_qq((uint32_t *) key_, (uint8_t *) src, (int64_t) src_len, out, out_len);
     if (buffer_updated < 0)
     {
-        luaL_error(L, "encrypt wrong\n");
-        return 0;
+        return luaL_error(L, "encrypt wrong\n");
     }
     lua_pushlstring(L, (const char *) out, (size_t) buffer_updated);
     return 1;
@@ -58,8 +56,7 @@ lencrypt(lua_State *L)
 {
     if (lua_gettop(L) != 3)
     {
-        luaL_error(L, "must be 3 args, key , sumtable and data");
-        return 0;
+        return luaL_error(L, "must be 3 args, key , sumtable and data");
     }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
@@ -85,8 +82,7 @@ lencrypt(lua_State *L)
                                          (int64_t) src_len, out, out_len);
     if (buffer_updated < 0)
     {
-        luaL_error(L, "encrypt wrong\n");
-        return 0;
+        return luaL_error(L, "encrypt wrong\n");
     }
     lua_pushlstring(L, (const char *) out, (size_t) buffer_updated);
     return 1;
@@ -97,8 +93,7 @@ lencrypt_native_endian(lua_State *L)
 {
     if (lua_gettop(L) != 3)
     {
-        luaL_error(L, "must be 3 args, key , sumtable and data");
-        return 0;
+        return luaL_error(L, "must be 3 args, key , sumtable and data");
     }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
@@ -125,8 +120,7 @@ lencrypt_native_endian(lua_State *L)
                                                        (int64_t) src_len, out, out_len);
     if (buffer_updated < 0)
     {
-        luaL_error(L, "encrypt wrong\n");
-        return 0;
+        return luaL_error(L, "encrypt wrong\n");
     }
     lua_pushlstring(L, (const char *) out, (size_t) buffer_updated);
     return 1;
@@ -137,8 +131,7 @@ ldecrypt_qq(lua_State *L)
 {
     if (lua_gettop(L) != 2)
     {
-        luaL_error(L, "must be 2 args, key and data");
-        return 0;
+        return luaL_error(L, "must be 2 args, key and data");
     }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
@@ -160,8 +153,7 @@ ldecrypt_qq(lua_State *L)
                                             (int64_t) src_len);
     if (buffer_updated < 0)
     {
-        luaL_error(L, "decrypt wrong\n");
-        return 0;
+        return luaL_error(L, "decrypt wrong\n");
     }
     lua_pushlstring(L, (const char *) out, (size_t) buffer_updated);
     return 1;
@@ -172,8 +164,7 @@ ldecrypt(lua_State *L)
 {
     if (lua_gettop(L) != 3)
     {
-        luaL_error(L, "must be 3 args, key , sumtable and data");
-        return 0;
+        return luaL_error(L, "must be 3 args, key , sumtable and data");
     }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
@@ -197,8 +188,7 @@ ldecrypt(lua_State *L)
                                          (int64_t) src_len, out, (int64_t) src_len);
     if (buffer_updated < 0)
     {
-        luaL_error(L, "decrypt wrong\n");
-        return 0;
+        return luaL_error(L, "decrypt wrong\n");
     }
     lua_pushlstring(L, (const char *) out, (size_t) buffer_updated);
     return 1;
@@ -209,8 +199,7 @@ ldecrypt_native_endian(lua_State *L)
 {
     if (lua_gettop(L) != 3)
     {
-        luaL_error(L, "must be 3 args, key , sumtable and data");
-        return 0;
+        return luaL_error(L, "must be 3 args, key , sumtable and data");
     }
     size_t key_len;
     const char *key = luaL_checklstring(L, 1, &key_len);
@@ -234,8 +223,7 @@ ldecrypt_native_endian(lua_State *L)
                                                        (int64_t) src_len, out, (int64_t) src_len);
     if (buffer_updated < 0)
     {
-        luaL_error(L, "decrypt wrong\n");
-        return 0;
+        return luaL_error(L, "decrypt wrong\n");
     }
     lua_pushlstring(L, (const char *) out, (size_t) buffer_updated);
     return 1;
