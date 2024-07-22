@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 project(simple-crypto C)
+
+#add_compile_definitions(TEA_NORAND)
 #SET(CMAKE_BUILD_TYPE "Release")
 # change this to your lua.h directory
 include_directories(D:\\conda\\envs\\py310\\Library\\include .)
